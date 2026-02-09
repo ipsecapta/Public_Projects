@@ -1,0 +1,157 @@
+!!!@@@@@@@@@@@@@@@@@ BR1-A
+ip route 0.0.0.0 0.0.0.0 172.20.0.241
+ip route 10.128.1.128 255.255.255.128 192.168.100.254
+router ospf 10 
+router-id 2.2.2.2
+log-adjacency-changes
+network 172.20.0.0 0.0.0.127 area 0
+network 172.20.0.128 0.0.0.63 area 0
+network 172.20.0.192 0.0.0.31 area 0
+network 172.20.0.224 0.0.0.15 area 0
+network 172.20.0.240 0.0.0.3 area 0
+!!GRE
+network 192.168.100.252 0.0.0.3 area 0
+
+passive g0/0/0
+passive g0/0/0.10
+passive g0/0/0.20
+passive g0/0/0.30
+passive g0/0/0.40
+
+
+
+!!!@@@@@@@@@@@@@@@@@ BR1-B
+ip route 0.0.0.0 0.0.0.0 172.20.0.245
+router ospf 10
+router-id 3.3.3.3
+router ospf 10 
+router-id 3.3.3.3
+log-adjacency-changes
+network 172.20.0.0 0.0.0.127 area 0
+network 172.20.0.128 0.0.0.63 area 0
+network 172.20.0.192 0.0.0.31 area 0
+network 172.20.0.224 0.0.0.15 area 0
+network 172.20.0.244 0.0.0.3 area 0
+
+
+passive g0/0/0
+passive g0/0/0.10
+passive g0/0/0.20
+passive g0/0/0.30
+passive g0/0/0.40
+
+
+!!!@@@@@@@@@@@@@@@@@ BR2-DualStack
+ip route 0.0.0.0 0.0.0.0 s0/0/0
+router ospf 10
+router-id 4.4.4.4
+log-adjacency-changes
+network 10.128.4.0 0.0.1.255 area 0
+network 10.128.6.0 0.0.0.255 area 0
+network 10.128.7.0 0.0.0.3 area 0
+network 172.20.0.248 0.0.0.3 area 0
+passive g0/0
+passive g0/1
+exit
+ipv6 route ::/0 FC00::FACE:1
+
+
+!!!@@@@@@@@@@@@@@@@@ MLS
+ip route 
+ip route 0.0.0.0 0.0.0.0 g0/1
+router ospf 10
+router-id 5.5.5.5
+network 10.128.7.0 0.0.0.3 area 0
+network 10.128.0.0 0.0.0.127 area 0
+network 10.128.0.128 0.0.0.127 area 0
+network 10.128.1.0 0.0.0.127 area 0
+network 10.128.1.128 0.0.0.127 area 0
+network 10.128.2.0 0.0.0.127 area 0
+network 172.20.0.248 0.0.0.3 area 0
+!!GRE
+network 192.168.100.252 0.0.0.3 area 0
+passive-interface Vlan100
+passive-interface Vlan105
+passive-interface Vlan110
+passive-interface Vlan115
+exit
+ipv6 route ::/ g0/1
+
+!!!@@@@@@@@@@@@@@@@@ HQ
+ip route 0.0.0.0 0.0.0.0 s0/2/1
+router ospf 10
+router-id  1.1.1.1
+log-adjacency-changes
+default-information originate
+network 172.16.30.0 0.0.0.255 area 0
+network 172.20.0.240 0.0.0.3 area 0
+network 172.20.0.244 0.0.0.3 area 0
+network 172.20.0.248 0.0.0.3 area 0
+
+exit
+ipv6 route ::/ s0/2/1
+
+!!@@@@@@@@@@@@@@@@@@@@OFFSITE
+
+ip route 0.0.0.0 0.0.0.0 209.165.200.49
+
+
+*******************************************IPv6 OSPF
+
+!!!!!!!!!!!!!!!!!!!!!! HQ
+ipv6 router ospf 11
+router-id 1.1.1.1
+int s0/2/0
+ipv6 ospf 11 area 0
+int so/2/1
+ipv6 ospf 11 area 0
+
+!!!!!!!!!!!!!!!!!!!!! BR2-Dualstack
+ipv6 router ospf 11
+router-id 2.2.2.2
+int s0/0/0
+ipv6 ospf 11 area 0
+
+int g0/0
+ipv6 ospf 11 area 0
+int g0/1
+ipv6 ospf 11 area 0
+int g0/2
+ipv6 ospf 11 area 0
+!!!!!!!!!!!!!!!!!!! MLS
+
+ipv6 router ospf 11
+router-id 3.3.3.3
+int g0/1
+ipv6 ospf 11 area 0
+int vlan 100
+ipv6 ospf 11 area 0
+int vlan 105
+ipv6  ospf 11 area 0
+int vlan 110
+ipv6  ospf 11 area 0
+int vlan 115
+ipv6 ospf  11 area 0
+int vlan 120
+ipv6 ospf  11 area 0
+
+!!!!!!!!!!!!!!!!!!!! OFSITE
+
+*****************
+NTP
+
+cisco
+en
+class
+conf t
+no ntp server 192.168.10.5
+ntp server 209.165.200.49
+do sh ntp assoc
+
+*************************TFTP 
+copy running-config tftp
+192.168.10.5
+
+
+
+

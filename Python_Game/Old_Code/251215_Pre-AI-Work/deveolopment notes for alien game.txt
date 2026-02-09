@@ -1,0 +1,116 @@
+0. what does owner_ref=None do?
+
+1. Hypothetically - if I wanted a different sprite for each type of alien bullet as well, Instead of setting a default to player, and instead of having an owner_level parameter as well, would I just have 5 types of owner? Player, alien1, alien2, alien3, boss alien? Or would there be a better way to do that when the time came?
+
+
+2. What are these three lines doing:
+  self.rect = pygame.Rect(0, 0, width, height)
+        self.rect.centerx = x
+        self.rect.centery = y
+
+
+3.What's the relationship between this line:
+self.y = float(self.rect.y)
+and this statement:
+        self.rect.centery = y
+
+
+4. Do I not need a color parameter as part of the bullet class? How will this statement: 
+ pygame.draw.rect(self.screen, self.color, self.rect)
+Know where to get self.color?
+
+
+I'd like to just spawn my aliens their sprite height above the screen top, and then let them just begin their motion pattern and let that carry them onto the screen. 
+
+What is the point of the line self.zig_down_speed = 0.5 + self.speed?
+
+Below that, what is the line              
+
+
+             self.base_x = 0.0 -i want each sprite at level 2 to start at a random x, at a y just off screen, and then begin its normal movement pattern. 
+
+
+Ichanged the following line:
+            self.drift_change_interval = random.randint(40, 80) #ships will change direction erratically, but within certain limits.
+
+So that it will hopefully accomplish an effect I want. 
+Will this work? 
+
+Question about this:
+ def check_edge_for_fleet(self):
+            """Use true/false boolean to tell alien if it has hit edge of screen - for lv1 fleets"""
+            if self.level != 1: #Have other aliens who do not move in fleets (lvl 2 and 3) ignore this instruction - they'll bounce on their own.
+                return False
+            if self.rect.right > self.settings.screen_width or self.rect.left <= 0:
+                 return True
+            return False
+
+Will each return statement stop the function there; so that the final :return false: statement only gets called if neither if before it is triggered?
+
+
+
+__________________
+Figuring out about firing:
+
+So:
+
+Alien sprite (therefore alien.py) should own: “My internal timer says I’m ready to fire now.”
+
+Game (therefore alien_game.py) should own: “Okay, since you want to fire, I’ll spawn a bullet for you.”
+
+
+__________________________________________-
+Alien level 3 movement:
+equation to ensure they do not get stuck at edge or go out of bounds:
+ elif self.level == 3: 
+            self.drift_timer += 1 #there is a "drift timer" that determines how long they continue in a direction before changing; here we increment it
+            if self.drift_timer >=self.drift_change_interval: #if timer has reached the drift interval, it's time to change direction: 
+                 self.vx, self.vy = self._alien3_vector_changer() #activate vector_changer to change direction
+                 self.drift_change_interval = random.randint(40, 80) #set a new random change interval.
+                 self.drift_timer = 0 #then reset the timer to zero, and it will now begin incrementing toward the interval chosen in prev. line.
+
+            self.x += self.vx #increment x movement
+            self.y += self.vy #increment y movement
+
+            self.rect.x = int(self.x)#match x and y coordinates to enable placement. 
+            self.rect.y = int(self.y)
+
+            if self.rect.left < 0:  # next 5 lines are to keep the erratic pattern from sending our alien out of bounds.
+                self.rect.left = 0
+                self.x = float(self.rect.x)
+                """self.vx, self.vy = self._alien3_vector_changer() #activate vector_changer to change direction
+                self.drift_change_interval = random.randint(40, 80) #set a new random change interval.
+                self.drift_timer = 0 #then reset the timer to zero, and it will now begin incrementing toward the interval chosen in prev. line."""
+            if self.rect.right > self.settings.screen_width:
+                self.rect.right = self.settings.screen_width
+                self.x = float(self.rect.x)
+                """self.vx, self.vy = self._alien3_vector_changer() #activate vector_changer to change direction
+                self.drift_change_interval = random.randint(40, 80) #set a new random change interval.
+                self.drift_timer = 0 #then reset the timer to zero, and it will now begin incrementing toward the interval chosen in prev. line."""
+
+
+Will the lines in triple quotes work if i remove the triple quotes?
+
+Second question: How can I implement something for the zigzagging aliens, the level 2 ones, that will prevent them from spawning where they will get stuck next to the edge? i WILL HAVE TO limit the range of their spawning coordinates to leave space 1/2 the defined wave amplitude of the sine function for wave2 alien motion. 
+
+Why dont' we put self._alien_firing_logic before 
+
+
+
+__________________________________________
+Do I need to destroy the temp aliens generated by the 
+
+
+
+Why is the program spawning all levels of alien if I have more than one player, even if I have none set in the wave_master dictionary?
+
+
+________________________________________________
+TO add:
+scale bullets - scale down sizes if 3 or more players.
+make laser tankers spawn in under everything
+
+dead players can play as squadron members - squadron member will spawn if powerup is executed, and take on the player color.
+
+victory Wave
+

@@ -1,0 +1,73 @@
+*****************************8
+****************************
+************NAT CONFIGURATION 
+
+
+!!!@@@@@@@@@@@@@@@@@@@@@@ON HQ
+
+ip nat inside source static 10.128.1.131 209.165.200.51
+int s0/2/0
+ip nat inside
+int s0/2/1
+ip nat outside
+ip access-list standard HQNAT
+permit 10.128.0.0 0.0.15.255
+permit 172.20.0.0 0.0.15.255
+permit 172.16.30.0 0.0.0.255
+
+ip nat pool NAT-POOL 209.165.200.52 209.165.200.53 netmask 255.255.255.248
+ip nat inside source list HQNAT pool NAT-POOL overload
+int s0/1/0 
+ip nat inside
+int s0/1/1
+ip nat inside
+
+****************************
+***************************
+*********************ACL's
+!!!APPLY TO BR1-SwA and BR1-SwB.
+access-list 10 remark Remote Access for Admin VLAN ONLY
+access-list 10 permit 172.20.0.128 255.255.255.192
+access-list 10 deny any
+
+line vty 0 15
+access-class 10 in
+
+
+
+!!!!!Apply to Br2 Router
+access-list 105 deny tcp 10.128.4.0 0.0.1.255 10.128.6.0 0.0.0.255 eq ftp
+access-list 105 deny tcp 10.128.4.0 0.0.1.255 172.20.0.192 0.0.0.31 eq ftp
+access-list 105 deny tcp 10.128.4.0 0.0.1.255 10.128.6.0 0.0.0.255 eq 20
+access-list 105 deny tcp 10.128.4.0 0.0.1.255 172.20.0.192 0.0.0.31 eq 20
+access-list 105 deny tcp 10.128.4.0 0.0.1.255 any eq 22
+access-list 105 deny tcp 10.128.4.0 0.0.1.255 any eq 23
+int g0/0
+ip access-group 105 in
+exit
+exit
+wr
+
+
+
+!!!!!!!!!!!APPLY on HQ
+ip Access-list extended OUTSIDE-ACCESS
+permit tcp any any eq 80
+permit tcp any any eq 443
+permit udp any any eq 69
+permit tcp any any eq 53
+permit udp any any eq 53
+permit icmp any any
+deny ip any any
+
+int s0/2/1
+ip access-group OUTSIDE-ACCESS out
+
+
+!!!!!!!!!APPLY on MLS
+access-list 115 permit ip 10.128.4.0 0.0.1.255 host 10.128.1.131 
+access-list 115 permit ip 10.128.6.0 0.0.0.255 host 10.128.1.131 
+access-list 115 permit ip 10.128.1.128 0.0.0.127 host 10.128.1.131 
+access-list 115 deny ip any host 10.128.1.131 
+access-list 115 deny icmp any host 10.128.1.131 
+access-list 115 permit ip any any

@@ -1,0 +1,417 @@
+Initial script (ALL DEVICES):
+
+en
+conf t
+no ip domain-lookup
+banner MOTD "WARNING: Unauthorized access prohibited. Any unauthorized modifications will be met with legal action."
+line con 0
+password cisco
+logging syn
+login
+
+ALL ROUTERS SECURITY
+
+en
+conf t
+enable secret class
+line vty 0 4
+password cisco
+login
+transport input ssh
+exit
+service password-encryption
+
+ALL SWITCHES SECURITY
+en
+conf t
+enable secret class
+line vty 0 15
+password cisco
+login
+transport input ssh
+exit
+service password-encryption
+
+***********************************************************************
+*****************BEGIN INSTRUCTIONS***********************************
+
+**************************************BR1-A ADDRESSING
+en
+conf t
+hostname Br1-A
+int g0/0/0.10
+enc dot 10
+ip add 172.20.0.1 255.255.255.128
+int g0/0/0.20
+enc dot 20
+ip add 172.20.0.193 255.255.255.224
+int g0/0/0.30
+enc dot 30
+ip add 172.20.0.129 255.255.255.192
+int g0/0/0.40
+enc dot 40
+ip add 172.20.0.225 255.255.255.240
+int g0/0/0.888
+enc dot 888 native
+int g0/0/0
+no shut
+
+int s0/1/1
+ip add 172.20.0.242 255.255.255.252
+no shut
+exit
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!BR1-A HSRP
+standby version 2
+int g0/0/0.10
+standby 10 ip 172.20.0.126
+standby 10 preempt
+standby 10 priority 150
+int g0/0/0.20
+standby 20 ip 172.20.0.222
+standby 20 preempt
+standby 20 priority 150
+int g0/0/0.30
+standby 30 ip 172.20.0.190
+standby 30 preempt
+standby 30 priority 150
+int g0/0/0.40
+standby 40 ip 172.20.0.238
+standby 40 preempt
+standby 40 priority 150
+
+*********************************************BR1-B ADDRESSING
+en
+conf t
+hostname Br1-B
+int g0/0/0.10
+enc dot 10
+ip add 172.20.0.2 255.255.255.128
+int g0/0/0.20
+enc dot 20
+ip add 172.20.0.194 255.255.255.224
+int g0/0/0.30
+enc dot 30
+ip add 172.20.0.130 255.255.255.192
+int g0/0/0.40
+enc dot 40
+ip add 172.20.0.226 255.255.255.240
+int g0/0/0.888
+enc dot 888 native
+
+int g0/0/0
+no shut
+
+int s0/1/1
+ip add 172.20.0.246 255.255.255.252
+no shut
+exit
+!!!!!!!!!!!!!!!!!!!!!!!!BR1-B HSRP
+standby version 2
+int g0/0/0.10
+standby 10 ip 172.20.0.126
+int g0/0/0.20
+standby 20 ip 172.20.0.222
+int g0/0/0.30
+standby 30 ip 172.20.0.190
+int g0/0/0.40
+standby 40 ip 172.20.0.238
+
+**********************************BR1-SwA ADDRESSING AND VLANS
+en
+conf t
+ip default-gateway 172.20.0.238
+hostname Br1-SA
+vlan 10
+name Manufacturing
+vlan 20
+name CivilEng
+Vlan 30
+name Admin
+Vlan 40
+name DeviceManager
+Vlan 888
+name Native
+vlan 999
+name BlackHole
+int range f0/4-12
+sw mode acc
+sw acc vlan 10
+no shut
+int range f0/13-18
+sw mode acc
+sw acc vlan 20
+no shut
+int range f0/18-24
+sw mode acc 
+sw acc vlan 30
+no shut
+
+int vlan 40
+	ip add 172.20.0.227 255.255.255.240
+no shut
+
+!!!!!!!!!!!!!!!!!!!!!!!!BR1-SwA Trunks & EtherChannel
+int range f0/1-2
+shut
+channel-group 1 mode active
+int po 1
+sw mode trunk
+sw trunk all vlan 10,20,30,40,888
+sw trunk native vlan 888
+sw nonegotiate
+int range f0/1-2
+no shut
+
+int g0/1
+sw mode trunk
+sw trunk all vlan 10,20,30,40,888
+sw trunk native vlan 888
+sw nonegotiate
+no shut
+
+!!!@@@@@BR2-SwA Blackhole
+int range f0/3,f0/5-12,f0/14-17,f0/19-24,g0/2
+sw mode acc
+sw acc vlan 999
+shut
+
+**********************************BR1-SwB ADDRESSING & VLANS
+
+en
+conf t
+ip default-gateway 172.20.0.238
+hostname BR1-SwB
+
+vlan 10
+name Manufacturing
+vlan 20
+name CivilEng
+Vlan 30
+name Admin
+Vlan 40
+name DeviceManager
+Vlan 888
+name Native
+vlan 999
+name BlackHole
+int range f0/4-12
+sw mode acc
+sw acc vlan 10
+no shut
+int range f0/13-18
+sw mode acc
+sw acc vlan 20
+no shut
+int range f0/18-24
+sw mode acc 
+sw acc vlan 30
+no shut
+
+int vlan 40
+	ip add 172.20.0.228 255.255.255.240
+no shut
+
+!!!!!!!!!!!!!!!!!!!!!BR1-SwB Trunks & EtherChannel
+int range f0/1-2
+shut
+channel-group 1 mode active
+int po 1
+sw mode trunk
+sw trunk all vlan 10,20,30,40,888
+sw trunk native vlan 888
+sw nonegotiate
+int range f0/1-2
+no shut
+
+int g0/1
+sw mode trunk
+sw nonegotiate
+sw trunk all vlan 10,20,30,40,888
+sw trunk native vlan 888
+no shut
+
+!!!@@@@@BR2-SwB Blackhole
+int range f0/3,f0/5-12,f0/14-17,f0/19-24,g0/2
+sw mode acc
+sw acc vlan 999
+shut
+
+**************************************************BR1-A SECURITY
+en
+conf t
+ip domain-name capstone.com
+crypto key generate rsa gen mod 2048
+username admin secret cisco12345
+ssh version 2
+line vty 0 4
+transport input ssh
+login local
+exec-timeout 8
+login block-for 180 attempts 4 within 60
+
+**************************************************BR1-B SECURITY
+en
+conf t
+ip domain-name capstone.com
+crypto key generate rsa gen mod 2048
+username admin secret cisco12345
+ssh version 2
+line vty 0 4
+transport input ssh
+login local
+exec-timeout 8
+login block-for 180 attempts 4 within 60
+
+
+*******************************************BR1-SwA & BR1-SwB SECURITY
+en
+conf t
+ip domain-name capstone.com
+crypto key generate rsa gen mod 2048
+username admin secret cisco12345
+ssh version 2
+line vty 0 15
+transport input ssh
+login local
+exec-timeout 8
+ip ssh auth 4
+
+int range f0/3-24,g0/2
+sw port
+sw port max 2
+sw port mac sticky
+sw port violation restrict
+span portfast
+span bpduguard enable
+
+**********************************************************
+**************************************************BRANCH2
+
+***************************R&D MLS Vlans & Addressing
+
+en
+conf t
+hostname R&D_MLS
+sdm prefer dual-ipv4-and-ipv6 default
+exit
+wr
+
+reload
+
+en
+conf t
+vlan 100
+name HR
+vlan 105
+name Staff
+vlan 110
+name Management
+vlan 115
+name Programming
+vlan 120
+name IT
+vlan 888
+name Native
+vlan 999
+name Blackhole
+
+int vlan 100
+ip add 10.128.0.1 255.255.255.128
+ipv6 add 2001:db8:face:100::1/64
+ipv6 add FE80::D100 link-local
+no shut
+int vlan 105
+ip add 10.128.0.129 255.255.255.128
+ipv6 add 2001:db8:face:105::1/64
+ipv6 add FE80::D105 link-local
+no shut
+int vlan 110
+ip add 10.128.1.1 255.255.255.128
+ipv6 add 2001:db8:face:110::1/64
+ipv6 add FE80::D110 link-local
+no shut
+int vlan 115
+ip add 10.128.1.129 255.255.255.128
+ipv6 add 2001:db8:face:115::1/64
+ipv6 add FE80::D115 link-local
+no shut
+int vlan 120
+ip add 10.128.2.1 255.255.255.128
+ipv6 add 2001:db8:face:120::1/64
+ipv6 add FE80::D120 link-local
+no shut
+
+int g0/1
+no sw
+ip add 10.128.7.2 255.255.255.252
+ipv6 add 2001:db8:face:3::2/64
+ipv6 add fe80::d link-local
+no shut
+exit
+
+ip routing
+
+
+int range f0/1-24
+sw mode acc
+int range f0/1-14
+sw acc vlan 100
+no shut
+int range f0/15-20
+sw acc vlan 105
+no shut
+
+int g0/2
+sw trunk enc dot
+sw mode trunk
+sw trunk all vlan 100,105,110,115,120,888
+sw trunk native vlan 888
+sw nonegotiate
+no shut
+exit
+wr
+
+
+**************************Switch0 (Branch2) Vlans & Addressing
+en
+conf t
+sdm prefer dual-ipv4-and-ipv6 default
+exit
+wr
+
+reload
+
+en
+conf t
+hostname R&D_MLS
+vlan 100
+name HR
+vlan 105
+name Staff
+vlan 110
+name Management
+vlan 115
+name Programming
+vlan 120
+name IT
+vlan 888
+name Native
+vlan 999
+name Blackhole
+
+int g0/2
+sw mode trunk
+sw trunk all vlan 100,105,110,115,120,888
+sw trunk native vlan 888
+sw nonegotiate
+no shut
+exit
+
+int vlan 120
+ip add 10.128.2.2 255.255.255.128
+ipv6 add 2001:db8:face:120::2/64
+no shut
+exit
+ip default-gateway 10.128.2.1
+exit
+wr

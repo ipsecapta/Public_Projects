@@ -1,0 +1,215 @@
+Initial script (ALL DEVICES):
+
+en
+conf t
+no ip domain-lookup
+banner MOTD "WARNING: Unauthorized access prohibited. Any unauthorized modifications will be met with legal action."
+line con 0
+password cisco
+logging syn
+login
+
+ALL ROUTERS SECURITY
+
+en
+conf t
+enable secret class
+line vty 0 4
+password cisco
+login
+transport input ssh
+exit
+service password-encryption
+
+ALL SWITCHES SECURITY
+en
+conf t
+enable secret class
+line vty 0 15
+password cisco
+login
+transport input ssh
+exit
+service password-encryption
+
+***********************************************************************
+*****************BEGIN INSTRUCTIONS***********************************
+
+**************************************BR1-A ADDRESSING
+en
+conf t
+hostname Br1-A
+int g0/0/0.10
+enc dot 10
+ip add 172.20.0.1 255.255.255.128
+int g0/0/0.20
+enc dot 20
+ip add 172.20.0.193 255.255.255.224
+int g0/0/0.30
+enc dot 30
+ip add 172.20.0.129 255.255.255.192
+int g0/0/0.40
+enc dot 40
+ip add 172.20.0.225 255.255.255.240
+int g0/0/0.888
+enc dot 888 native
+int g0/0/0
+no shut
+
+int s0/1/1
+ip add 172.20.0.242 255.255.255.252
+no shut
+exit
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!BR1-A HSRP
+standby version 2
+int g0/0/0.10
+standby 10 ip 172.20.0.126
+standby 10 preempt
+standby 10 priority 150
+int g0/0/0.20
+standby 20 ip 172.20.0.222
+standby 20 preempt
+standby 20 priority 150
+int g0/0/0.30
+standby 30 ip 172.20.0.190
+standby 30 preempt
+standby 30 priority 150
+int g0/0/0.40
+standby 40 ip 172.20.0.238
+standby 40 preempt
+standby 40 priority 150
+ 
+*********************************************BR1-B ADDRESSING
+en
+conf t
+hostname Br1-B
+int g0/0/0.10
+enc dot 10
+ip add 172.20.0.2 255.255.255.128
+int g0/0/0.20
+enc dot 20
+ip add 172.20.0.194 255.255.255.224
+int g0/0/0.30
+enc dot 30
+ip add 172.20.0.130 255.255.255.192
+int g0/0/0.40
+enc dot 40
+ip add 172.20.0.226 255.255.255.240
+int g0/0/0.888
+enc dot 888 native
+
+int s0/1/1
+ip add 172.20.0.246 255.255.255.252
+no shut
+exit
+!!!!!!!!!!!!!!!!!!!!!!!!BR1-B HSRP
+standby version 2
+int g0/0/0.10
+standby 10 ip 172.20.0.126
+int g0/0/0.20
+standby 20 ip 172.20.0.222
+int g0/0/0.30
+standby 30 ip 172.20.0.190
+int g0/0/0.40
+standby 40 ip 172.20.0.238
+
+**********************************BR2-SwA ADDRESSING AND VLANS
+en
+conf t
+ip default-gateway 172.20.0.238
+
+vlan 10
+name Manufacturing
+vlan 20
+name CivilEng
+Vlan 30
+name Admin
+Vlan 40
+name DeviceManager
+Vlan 888
+name Native
+vlan 999
+name BlackHole
+int range f0/4-12
+sw mode acc
+sw acc vlan 10
+no shut
+int range f0/13-18
+sw mode acc
+sw acc vlan 20
+no shut
+int range f0/18-24
+sw mode acc 
+sw acc vlan 30
+no shut
+
+int vlan 40
+	ip add 172.20.0.227 255.255.255.240
+no shut
+
+!!!!!!!!!!!!!!!!!!!!!!!!BR2-SwA Trunks & EtherChannel
+int range f0/1-2
+shut
+channel-group 1 mode active
+int po 1
+sw mode trunk
+sw trunk all vlan 10,20,30,40,888
+sw nonegotiate
+int range f0/1-2
+no shut
+
+int g0/1
+sw mode trunk
+sw trunk all vlan 10,20,30,40,888
+sw nonegotiate
+no shut
+
+**********************************BR2-SwB ADDRESSING & VLANS
+
+en
+conf t
+vlan 10
+name Manufacturing
+vlan 20
+name CivilEng
+Vlan 30
+name Admin
+Vlan 40
+name DeviceManager
+Vlan 888
+name Native
+vlan 999
+name BlackHole
+int range f0/4-12
+sw mode acc
+sw acc vlan 10
+no shut
+int range f0/13-18
+sw mode acc
+sw acc vlan 20
+no shut
+int range f0/18-24
+sw mode acc 
+sw acc vlan 30
+no shut
+
+int vlan 40
+	ip add 172.20.0.228 255.255.255.240
+no shut
+
+!!!!!!!!!!!!!!!!!!!!!BR2-SwA Trunks & EtherChannel
+int range f0/1-2
+shut
+channel-group 1 mode active
+int po 1
+sw mode trunk
+sw trunk all vlan 10,20,30,40,888
+sw nonegotiate
+int range f0/1-2
+no shut
+
+int g0/1
+sw mode trunk
+sw nonegotiate
+sw trunk all vlan 10,20,30,40,888
+no shut

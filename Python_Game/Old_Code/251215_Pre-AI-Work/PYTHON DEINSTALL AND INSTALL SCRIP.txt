@@ -1,0 +1,19 @@
+#PYTHON DEINSTALL AND INSTALL SCRIPT
+
+winget list Python
+winget uninstall --id Python.Python
+winget uninstall --id Python.Python.3.14
+winget uninstall --id Python.Python.3.12
+winget uninstall --id Python.Python.3.11
+
+winget install Python.Python.3.11
+
+_____
+py -3.11 -m pip install pygame
+
+
+___
+
+***
+Alt uninstall method:
+winget uninstall "Python 3.14"  (target whatever definitions show up after the list Python command.

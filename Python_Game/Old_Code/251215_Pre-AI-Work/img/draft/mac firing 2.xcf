@@ -1,0 +1,21 @@
+time 0.5
+image_size 191 393 center 0 0 pixels_per_unit 100
+spatial_oversample 2 spatial_filter_radius 1 sample_density 16.3159
+nbatches 1 white_level 200
+brightness 1 gamma 2 cmap_inter 0
+xform 0 density 1 color 1
+var 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0
+coefs -0.415451 -0.208474 -0.095281 0.534787 -0.0633916 0.713723
+xform 1 density 1 color 0
+var 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0
+coefs -0.707964 0.0887296 -0.439393 0.216484 -0.326309 0.839506
+xform 2 density 1 color 0
+var 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0
+coefs -0.367828 0.663065 -0.12207 -0.909482 -0.411361 -0.68258
+xform 3 density 1 color 0
+var 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.6875 0 0 0 0 0.3125 0 0
+coefs 0.998062 -0.133135 -0.424207 -0.000814548 0.130392 -0.124393
+xform 4 density 1 color 0
+var 0 0 0 0.6875 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.3125 0 0
+coefs 0.52004 0.336737 -0.130814 0.172212 0.431816 0.33547
+;

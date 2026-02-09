@@ -1,0 +1,170 @@
+CISCO3CapstoneDHCP
+
+********************* on >HQ< router:::
+
+!!!@@@@@@@@@@BR1-VLans
+ip dhcp excluded-address 172.20.0.1 172.10.0.5
+ip dhcp excluded-address 172.20.0.129 172.20.0.134
+ip dhcp excluded-address 172.20.0.193 172.20.0.198
+ip dhcp excluded-address 172.20.0.225 172.20.0.230
+
+!!!@@@@@@@@Br1-HSRP Reserves
+ip dhcp excluded-address 172.20.0.126
+ip dhcp excluded-address 172.20.0.222
+ip dhcp excluded-address 172.20.0.190
+
+!!!@@@@@@@@@@BR2Lans
+ip dhcp excluded-address 10.128.0.1 10.128.0.5
+    !!!@@@R&DVLans
+	ip dhcp excluded-address 10.128.0.129 10.128.0.134
+	ip dhcp excluded-address 10.128.1.1 10.128.1.5
+	ip dhcp excluded-address 10.128.1.129 10.128.1.134
+	ip dhcp excluded-address 10.128.2.1 10.128.2.5
+ip dhcp excluded-address 10.128.4.1 10.128.4.5
+ip dhcp excluded-address 10.128.6.1 10.128.6.5
+ip dhcp excluded-address 10.128.7.1 10.128.7.5
+
+!!!@@@@@@@@@OffsiteLan
+ip dhcp excluded-address 192.168.10.1 192.168.10.5
+
+!!!@@@@@@@@@MobileSalesLan
+ip dhcp excluded-address 172.16.30.1 172.16.30.5
+
+
+!!!~~~~~~~~POOLS~~~~~~~~~~~
+
+!!!!!~~~Branch 1 Pools
+
+	ip dhcp pool BR1-VLAN10(MANUFACT)
+	network 172.20.0.0 255.255.255.128
+	default-router 172.20.0.1
+dns-server 192.168.10.5
+domain-name capstone.com
+
+	ip dhcp pool BR1-VLAN20(CIVILENG)
+	network 172.20.0.192 255.255.255.224
+	default-router 172.20.0.1
+dns-server 192.168.10.5
+domain-name capstone.com
+
+	ip dhcp pool BR1-VLAN30(ADMIN)
+	network 172.20.0.128 255.255.255.192
+	default-router 172.20.0.1
+dns-server 192.168.10.5
+domain-name capstone.com
+
+!!!!!~~~Branch 2 Pools
+
+ip dhcp pool BR2-ENGINEERING
+	network 10.128.4.0 255.255.254.0
+	default-router 10.128.4.1
+dns-server 192.168.10.5
+domain-name capstone.com
+
+ip dhcp pool BR2-TESTING
+	network 10.128.6.0 255.255.255.0
+	default-router 10.128.6.1
+dns-server 192.168.10.5
+domain-name capstone.com
+
+ip dhcp pool BR2-VLAN100(HR)
+	network 10.128.0.0 255.255.255.128
+	default-router 10.128.0.1
+dns-server 192.168.10.5
+domain-name capstone.com
+
+ip dhcp pool BR2-VLAN105(STAFF)
+	network 10.128.0.128 255.255.255.128
+	default-router 10.128.0.129
+dns-server 192.168.10.5
+domain-name capstone.com
+
+ip dhcp pool BR2-VLAN110(MGMT)
+	network 10.128.1.0 255.255.255.128
+	default-router 10.128.1.1
+dns-server 192.168.10.5
+domain-name capstone.com
+
+ip dhcp pool BR2-VLAN115(PROG)
+	network 10.128.1.128 255.255.255.128
+	default-router 10.128.1.129
+dns-server 192.168.10.5
+domain-name capstone.com
+
+!!!!~~~~~~~~~~~Mobile Sales Pool
+
+ip dhcp pool MOBILE_SALES
+	network 172.16.30.0 255.255.255.0
+	default-router 172.16.30.1
+dns-server 192.168.10.5
+domain-name capstone.com
+
+******************************** IP HELPER RELAYS
+
+**************** BR1-A 
+int g0/0/0.10
+ip helper 172.20.0.241
+int g0/0/0.20
+ip helper 172.20.0.241
+int g0/0/0.30
+ip helper 172.20.0.241
+
+**************** BR1-B
+int g0/0/0.10
+ip helper 172.20.0.245
+int g0/0/0.20
+ip helper 172.20.0.245
+int g0/0/0.30
+ip helper 172.20.0.245
+
+*************** BR2-DualStack
+int g0/0
+ip helper 172.20.0.249
+int g0/1
+ip helper 172.20.0.249
+
+**************BR2-R&D_MLS
+int g0/1
+ip helper 172.20.0.249
+int vlan 100
+ip helper 172.20.0.249
+int vlan 105
+int vlan 105
+ip helper 172.20.0.249
+int vlan 110
+ip helper 172.20.0.249
+int vlan 115
+ip helper 172.20.0.249
+int vlan 120
+ip helper 172.20.0.249
+
+
+
+
+*******************************
+*******************************DHCPv6
+
+************************MLS
+en
+conf t
+ipv6 unicast-routing
+
+**********************BR2-DualStack
+
+en
+conf t
+ipv6 unicast-routing
+	ipv6 dhcp pool ENGINEERING
+dns-server 2001:db8:abcd::5
+domain-name capstone.com
+	int g0/0
+	ipv6 dhcp server ENGINEERING
+ipv6 nd other-config-flag
+
+ipv6 unicast-routing
+	ipv6 dhcp pool TESTING
+dns-server 2001:db8:abcd::5
+domain-name capstone.com
+	int g0/1
+	ipv6 dhcp server TESTING
+ipv6 nd other-config-flag

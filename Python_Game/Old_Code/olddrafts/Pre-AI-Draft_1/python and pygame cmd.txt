@@ -1,0 +1,3 @@
+winget install --id=Python.Python.3.9 -e
+Y
+pip install pygame

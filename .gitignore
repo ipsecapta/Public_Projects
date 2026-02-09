@@ -1,0 +1,29 @@
+#Anything in the Python game folder I manually designate with ._
+Python_Game/._*
+
+#miscellaneous direct ignores:
+.gitignore_quickedit
+
+#All .exe and .pkg files, for now
+**/*.exe
+**/*.pkg 
+
+# Python
+**/__pycache__/
+**/*.pyc
+**/.venv/
+**/venv/
+
+# OS/editor junk
+**/.DS_Store
+**/Thumbs.db
+**/.vscode/
+**/.cursor/
+
+# PyInstaller output
+**/build/
+**/dist/
+**/*.spec.user
+
+# Logs / misc
+**/*.log
