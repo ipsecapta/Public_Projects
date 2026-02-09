@@ -75,10 +75,10 @@ class MenuMain:
         self._draw_background()
 
         self._draw_text("SPACE INVADER DEFENSE!", self.title_font, w // 2, int(h * 0.10))
-        self._draw_text("I hope you have been enjoying the game! Get ready to experience it... WITH SOUNDS!", self.subtitle_font, w // 2, int(h * 0.18))
-        self._draw_text("Updates: More detailed Victory/Defeat Credits! Background music included. Tell me about any glitches that happen!",  self.subtitle_font, w // 2, int(h * 0.22))
+        self._draw_text("To my nieces and nephews: Enjoy the game!", self.subtitle_font, w // 2, int(h * 0.18))
+        self._draw_text("Latest Updates: More detailed (and fun) Victory/Defeat Credits, Background music included. Tell me about any glitches that happen!",  self.subtitle_font, w // 2, int(h * 0.22))
         self._draw_text("I've finished the art for the Railgun/MAC powerups - just have to program the spaceships!",  self.subtitle_font, w // 2, int(h * 0.26))
-        self._draw_text("And if you have ideas for MORE or DIFFERENT sounds... just record them with your Dad, and I'll have a listen to see where they might fit!", self.subtitle_font, w // 2, int(h * 0.30))
+        self._draw_text("And if you have ideas for MORE or DIFFERENT sounds... just record them, and I'll have a listen to see where they might fit!", self.subtitle_font, w // 2, int(h * 0.30))
 
         base_y = int(h * 0.38)
         gap = 60
