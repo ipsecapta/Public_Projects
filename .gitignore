@@ -2,7 +2,7 @@
 Python_Game/._*
 
 #miscellaneous direct ignores:
-.gitignore_quickedit
+**/.gitignore_quickedit.txt
 
 #All .exe and .pkg files, for now
 **/*.exe
