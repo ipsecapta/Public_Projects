@@ -1,6 +1,9 @@
 **REPO INDEX:**
 
-**Python_Game:** code and media for a multiplayer-capable Space Invaders-style 2d shooter. Subdirectory **Current_Iteration** has latest version. 
+TLDR: [Python Game Current Iteration](https://github.com/ipsecapta/Public_Projects/tree/main/Python_Game/Current_Iteration)
+      [Packet Tracer Network README](https://github.com/ipsecapta/Public_Projects/blob/main/Packet_Tracer_Network/README.md)
+
+**Python_Game:** code and media for a multiplayer-capable Space Invaders-style 2D shooter. Subdirectory **Current_Iteration** has latest version. 
   -Began as a capstone assignment for Python studies - see "Final_Classwork_Version" subdirectory for state of game as a class assignment, before 
   integrating AI via Codex / Cursor.
           (at which point it had already far exceeded the requirements of demonstrating basic proficiency - 
