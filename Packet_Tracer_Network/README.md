@@ -1,5 +1,6 @@
-**PACKET_TRACER_NETWORK.pkt:** Virtual network demonstrating proficiency with basic network protocols, ip addressing, 
-    ACLs, etc. [Click here to download download raw .pkt file.](https://github.com/ipsecapta/Public_Projects/raw/refs/heads/main/Packet_Tracer_Network/PACKET_TRACER_NETWORK.pkt)
+**PACKET_TRACER_NETWORK.pkt:** 
+
+Virtual network demonstrating proficiency with basic network protocols, ip addressing, ACLs, etc. [Click here to download download raw .pkt file.](https://github.com/ipsecapta/Public_Projects/raw/refs/heads/main/Packet_Tracer_Network/PACKET_TRACER_NETWORK.pkt)
 
 [Click here to Download **README_Detailed.docx**](https://github.com/ipsecapta/Public_Projects/raw/refs/heads/main/Packet_Tracer_Network/README_Detailed.docx) for full documentation on the network. 
 
