@@ -13,7 +13,7 @@ ________________________________________________________________________________
 **GAME DESCRIPTION:**
 Arcade shooter with multi-wave, scaled difficulty gameplay format. Passion project, initial codebase done by hand ([check out other directories](https://github.com/ipsecapta/Public_Projects/tree/main/Python_Game/Old_Code) for work-in-progress snapshots)
 This is a 'homemade' Python-based Alien Invasion Game.
-I use the experience of building and expanding it to continually build new skills in Python, both with manual and AI-integrated coding.
+I use the experience of building and expanding it to continually build new skills in Python, both with manual and AI-assisted coding.
 
 ___
 
