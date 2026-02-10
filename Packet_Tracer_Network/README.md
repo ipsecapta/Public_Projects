@@ -17,6 +17,7 @@ This project demonstrates ability to:
 **INDEX**
 
 **drafts:** contains .pkt files showing incremental stages of construction of the network. 
+
 **config_scripts:** contains .txt files showing the scripts used for configuring the network devices.
 
 Download **README_Detailed.docx** for full documentation on the network. 
