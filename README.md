@@ -1,7 +1,7 @@
 
 
 TLDR: 
-- See [Python Game Current Iteration](https://github.com/ipsecapta/Public_Projects/tree/main/Python_Game/Current_Iteration)  for python code and detailed documentation    
+- See [Python Game Current Iteration](https://github.com/ipsecapta/Public_Projects/tree/main/Python_Game/Current_Iteration) for python code, and scroll down to the README for detailed documentation    
 - See [Packet Tracer Network README](https://github.com/ipsecapta/Public_Projects/blob/main/Packet_Tracer_Network/README.md) for networking skills and detailed documentation
 
 **REPO INDEX:**
