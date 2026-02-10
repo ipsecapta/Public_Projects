@@ -3,7 +3,7 @@ A "Space Invaders"-style 2d shooter made from scratch, using Pygame.
 
 **INDEX**:
 
-**Current_Iteration directory:** contains code, media files and documentation for latest version of the game.
+[**Current_Iteration directory:**](https://github.com/ipsecapta/Public_Projects/tree/main/Python_Game/Current_Iteration) Main directory of interest. Contains detailed README, plus all code, media files and documentation for latest version of the game.
 
 **Final_Classwork_Version:** Final version of the game before submission as capstone for class (at which point it had 
 	already far exceeded the class requirements)
