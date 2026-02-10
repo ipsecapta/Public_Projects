@@ -1,6 +1,6 @@
 **REPO INDEX:**
 
-TLDR: [Python Game Current Iteration](https://github.com/ipsecapta/Public_Projects/tree/main/Python_Game/Current_Iteration)
+TLDR: [Python Game Current Iteration](https://github.com/ipsecapta/Public_Projects/tree/main/Python_Game/Current_Iteration)   
       [Packet Tracer Network README](https://github.com/ipsecapta/Public_Projects/blob/main/Packet_Tracer_Network/README.md)
 
 **Python_Game:** code and media for a multiplayer-capable Space Invaders-style 2D shooter. Subdirectory **Current_Iteration** has latest version. 
