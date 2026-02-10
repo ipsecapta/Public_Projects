@@ -1,5 +1,7 @@
 **PACKET_TRACER_NETWORK.pkt:** Virtual network demonstrating proficiency with basic network protocols, ip addressing, 
-    ACLs, etc. 
+    ACLs, etc. [Click here to download download raw .pkt file.](https://github.com/ipsecapta/Public_Projects/raw/refs/heads/main/Packet_Tracer_Network/PACKET_TRACER_NETWORK.pkt)
+
+[Click here to Download **README_Detailed.docx**](https://github.com/ipsecapta/Public_Projects/raw/refs/heads/main/Packet_Tracer_Network/README_Detailed.docx) for full documentation on the network. 
 
 This project demonstrates ability to: 
 - Design a VLSM addressing scheme
@@ -20,4 +22,4 @@ This project demonstrates ability to:
 
 **config_scripts:** contains .txt files showing the scripts used for configuring the network devices.
 
-Download **README_Detailed.docx** for full documentation on the network. 
+
